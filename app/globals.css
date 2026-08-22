@@ -5,12 +5,16 @@
 :root { color-scheme: dark; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: #070707; color: #f5f5f5; font-family: Arial, sans-serif; }
+body { margin: 0; background: #000; color: #f5f5f5; font-family: Arial, sans-serif; }
 a { color: inherit; text-decoration: none; }
 ::selection { background: #ff5c35; color: #fff; }
 .grain { position: relative; }
 .grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .045; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E"); mix-blend-mode: screen; }
 .image-shade { background: linear-gradient(90deg, rgba(0,0,0,.6), transparent 65%), linear-gradient(0deg, rgba(0,0,0,.65), transparent 45%); }
 header { background-color: rgb(0 0 0 / .6); border-bottom-color: rgb(255 255 255 / .1); backdrop-filter: blur(12px); }
+
+/* Keep the application surface pitch black while preserving depth in cards. */
+section.bg-\[\#080C14\], section.bg-\[\#08090c\], section.bg-\[\#111111\], footer.bg-\[\#0A0A0A\] { background-color: #000 !important; }
+div.bg-\[\#080C14\], div.bg-\[\#08090c\], div.bg-\[\#0d1118\], div.bg-\[\#0d1118\]\/90, div.bg-\[\#0b0d11\], div.bg-\[\#111111\], article.bg-\[\#111111\] { background-color: rgb(255 255 255 / .03) !important; }
 /* The language selector remains available in the utility strip above; keep the primary row focused on mission navigation. */
 header > div:nth-child(2) > div > div:first-child > div { display: none; }

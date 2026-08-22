@@ -1,0 +1,20 @@
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, MapPin } from "lucide-react";
+import { useState } from "react";
+
+export interface IsroCenter { code: string; city: string; name: string; description: string; coordinates: string; }
+const centers: IsroCenter[] = [
+  { code: "URSC", city: "Bengaluru", name: "U R Rao Satellite Centre", description: "Satellite design, integration, and testing for India’s space missions.", coordinates: "12.99° N / 77.66° E" },
+  { code: "VSSC", city: "Thiruvananthapuram", name: "Vikram Sarabhai Space Centre", description: "Launch vehicle technology, rocket propulsion, and space transportation systems.", coordinates: "8.52° N / 76.94° E" },
+  { code: "SDSC SHAR", city: "Sriharikota", name: "Satish Dhawan Space Centre", description: "India’s primary spaceport and launch complex on the east coast.", coordinates: "13.72° N / 80.23° E" },
+  { code: "SAC", city: "Ahmedabad", name: "Space Applications Centre", description: "Space sensors, payloads, communication systems, and applications research.", coordinates: "23.03° N / 72.54° E" },
+  { code: "NRSC", city: "Hyderabad", name: "National Remote Sensing Centre", description: "Satellite data reception, processing, and geospatial applications.", coordinates: "17.45° N / 78.38° E" },
+  { code: "ISTRAC", city: "Bengaluru", name: "ISRO Telemetry Tracking & Command Network", description: "Telemetry, tracking, and deep space mission operations.", coordinates: "13.02° N / 77.57° E" }
+];
+
+export function IsroCentersMap() {
+  const [active, setActive] = useState(centers[0]);
+  return <section className="bg-black px-6 py-24 lg:px-10 lg:py-36"><div className="mx-auto max-w-[1440px]"><div className="mb-14"><p className="mb-5 text-[10px] uppercase tracking-[.32em] text-ember">A national footprint</p><h2 className="text-5xl font-medium tracking-tighter md:text-7xl">Where the work happens.</h2></div><div className="grid gap-5 lg:grid-cols-[.75fr_1.25fr]"><div className="border border-white/10 bg-[#080C14] p-2">{centers.map((center) => <button key={center.code} onClick={() => setActive(center)} className={`flex w-full items-center justify-between border-b border-white/10 px-4 py-5 text-left last:border-0 ${active.code === center.code ? "bg-white/[.06]" : "hover:bg-white/[.03]"}`}><span><span className={`block text-sm font-bold tracking-tight ${active.code === center.code ? "text-ember" : "text-white/75"}`}>{center.code}</span><span className="mt-1 block text-xs text-white/35">{center.city}</span></span><ArrowUpRight size={16} className={active.code === center.code ? "text-ember" : "text-white/20"} /></button>)}</div><div className="relative min-h-[430px] overflow-hidden rounded-xl border border-white/10 bg-[radial-gradient(circle_at_62%_38%,rgba(96,165,250,.18),transparent_24%),linear-gradient(135deg,#0a0d15,#050608)] p-7 md:p-12"><div className="absolute inset-0 opacity-30 bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)] bg-[size:48px_48px]" /><div className="absolute left-[58%] top-[36%] h-28 w-28 rounded-full border border-blue-400/20 shadow-[0_0_100px_rgba(96,165,250,.25)]"><span className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-blue-300 shadow-[0_0_24px_#60a5fa]" /></div><AnimatePresence mode="wait"><motion.div key={active.code} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} className="relative flex h-full flex-col justify-end"><p className="mb-4 text-[10px] uppercase tracking-[.28em] text-blue-300">{active.code} / {active.city}</p><h3 className="max-w-xl text-4xl font-medium tracking-tighter md:text-6xl">{active.name}</h3><p className="mt-5 max-w-lg text-sm leading-7 text-white/55">{active.description}</p><p className="mt-8 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.2em] text-white/35"><MapPin size={14} />{active.coordinates}</p></motion.div></AnimatePresence></div></div></div></section>;
+}

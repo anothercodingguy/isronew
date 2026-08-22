@@ -1,0 +1,10 @@
+"use client";
+
+import { ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { isroImages } from "@/src/constants/images";
+
+export function HLVM3Featurette() {
+  return <section className="overflow-hidden bg-[#111111] px-6 py-24 lg:px-10 lg:py-36"><div className="mx-auto grid max-w-[1440px] items-center gap-16 lg:grid-cols-[.85fr_1.15fr] lg:gap-24"><motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: .7 }}><p className="mb-6 text-[10px] uppercase tracking-[.32em] text-ember">The launch vehicle</p><h2 className="max-w-xl text-5xl font-medium leading-[.9] tracking-tighter md:text-7xl">Built for the human factor.</h2><p className="mt-8 max-w-md text-sm leading-7 text-white/55 md:text-base">Powered by the HLVM3. A human-rated variant of India’s heaviest lift vehicle, reconfigured with paramount focus on reliability and human safety.</p><a href="#top" className="mt-10 inline-flex items-center gap-4 border border-white/35 px-5 py-4 text-[10px] font-bold uppercase tracking-[.22em] transition-colors hover:border-ember hover:bg-ember">View rocket specs <ArrowUpRight size={15} /></a></motion.div><motion.div initial={{ opacity: 0, scale: .96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: .9 }} className="relative min-h-[500px] overflow-hidden rounded-2xl border border-white/10 bg-[#0d1118]"><Image src={isroImages.lvm3Liftoff} alt="LVM3 lifting off from the Second Launch Pad at Sriharikota" fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover opacity-75" /><div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" /><span className="absolute bottom-5 left-5 font-mono text-[9px] uppercase tracking-[.24em] text-white/60">HLVM3 / Human-rated launch vehicle</span><span className="absolute right-5 top-5 text-[9px] uppercase tracking-[.24em] text-white/60">01 — 04</span></motion.div></div></section>;
+}

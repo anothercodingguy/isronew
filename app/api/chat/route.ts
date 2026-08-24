@@ -1,29 +1,73 @@
-import { NextRequest } from "next/server";
+import { groq } from "@ai-sdk/groq";
+import { streamText } from "ai";
 
 export const runtime = "nodejs";
-interface ChatRequest { message?: string; }
+export const dynamic = "force-dynamic";
 
-function getMockAnswer(message: string): string {
-  const normalized = message.toLowerCase();
-  if (normalized.includes("yuvika") || normalized.includes("young scientist")) return "YUVIKA is ISRO’s Young Scientist Programme for students, designed to build awareness of space science and technology through learning sessions, hands-on activities, and visits to ISRO centres. For the latest eligibility rules and application dates, check the official ISRO announcements because each edition can have its own criteria.";
-  if (normalized.includes("gaganyaan")) return "Gaganyaan is India’s human spaceflight programme. Its objective is to demonstrate an indigenous capability to send astronauts to low Earth orbit and return them safely to Indian waters. The programme includes uncrewed test missions, crew escape testing, and a human-rated launch vehicle.";
-  if (normalized.includes("chandrayaan")) return "Chandrayaan-3 demonstrated a soft landing on the Moon and surface operations near the lunar south polar region. Its lander and rover helped expand India’s understanding of lunar terrain and make future exploration more capable.";
-  return "I can help you explore ISRO missions, Gaganyaan, Chandrayaan, Aditya-L1, YUVIKA, careers, and space technology programmes. Ask a specific question and I’ll point you toward a clear, citizen-friendly answer.";
+interface ChatRequest {
+  message?: unknown;
 }
 
-export async function POST(request: NextRequest) {
-  let body: ChatRequest;
-  try { body = await request.json() as ChatRequest; } catch { return Response.json({ error: "Invalid JSON body" }, { status: 400 }); }
-  const message = body.message?.trim();
-  if (!message) return Response.json({ error: "A message is required" }, { status: 400 });
+const ISRO_SYSTEM_PROMPT = `You are the ISRO Citizen Space Agent, a helpful public-facing assistant for the Indian Space Research Organisation.
 
-  // TODO: Replace this mock lookup with the production RAG pipeline:
-  // 1. Embed `message` with the selected embedding model.
-  // 2. Query the Qdrant collection containing chunked ISRO PDFs, programme pages,
-  //    and verified public notices. Apply metadata filters for language and source.
-  // 3. Pass the top-k retrieved chunks into the response model as grounded context.
-  // const context = await qdrantClient.search({ collectionName: "isro-pdfs", queryVector, limit: 6 });
-  const chunks = getMockAnswer(message).match(/.{1,34}(?:\s|$)/g) ?? [getMockAnswer(message)];
-  const stream = new ReadableStream<Uint8Array>({ async start(controller) { const encoder = new TextEncoder(); for (const chunk of chunks) { controller.enqueue(encoder.encode(chunk)); await new Promise((resolve) => setTimeout(resolve, 24)); } controller.close(); } });
-  return new Response(stream, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache, no-transform", "X-Content-Type-Options": "nosniff" } });
+Answer questions concisely, professionally, and in plain language. Never invent official dates, application rules, launch schedules, or statistics. If the supplied facts do not answer a question, clearly say that the user should verify the latest information on the official ISRO website (isro.gov.in).
+
+Use this verified ISRO context when relevant:
+1. YUVIKA is ISRO's Young Scientist Programme. It is designed primarily for Class 9 students and introduces them to space science and technology through lectures, practical activities, facility visits, and interaction with scientists. Eligibility and dates can vary by edition.
+2. Gaganyaan is India's human spaceflight programme. It aims to demonstrate an indigenous capability to send a crew of three astronauts to a 400 km low Earth orbit for approximately three days and return them safely to Indian waters.
+3. Bhuvan is ISRO's national geoportal for Earth observation data and geospatial applications, including mapping and planning use cases.
+4. Chandrayaan-3 achieved a soft landing on the lunar surface and deployed the Vikram lander and Pragyan rover near the lunar south polar region in August 2023.
+5. Aditya-L1 is India's first space-based solar observatory, positioned around the Sun-Earth L1 point to study the Sun and space weather.
+6. ISRO develops launch vehicles, satellites, space science missions, Earth observation applications, navigation services, and communication technologies for national development.
+
+When discussing careers, student programmes, or public services, provide practical next steps and direct users to official ISRO announcements for current application windows. Do not claim to submit applications, access private records, or provide live mission control data.`;
+
+export async function POST(request: Request) {
+  if (!process.env.GROQ_API_KEY) {
+    return Response.json(
+      { error: "The AI service is not configured. Add GROQ_API_KEY to the environment." },
+      { status: 503 },
+    );
+  }
+
+  let body: ChatRequest;
+
+  try {
+    body = (await request.json()) as ChatRequest;
+  } catch {
+    return Response.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
+
+  const message = typeof body.message === "string" ? body.message.trim() : "";
+
+  if (!message) {
+    return Response.json({ error: "A non-empty message is required." }, { status: 400 });
+  }
+
+  if (message.length > 4000) {
+    return Response.json({ error: "Message is too long. Please keep it under 4,000 characters." }, { status: 413 });
+  }
+
+  try {
+    // This demo intentionally uses context injection instead of a vector database.
+    // A future retrieval layer can append verified ISRO documents to this system prompt
+    // before calling streamText, without changing the frontend streaming contract.
+    const result = streamText({
+      model: groq("llama3-8b-8192"),
+      system: ISRO_SYSTEM_PROMPT,
+      messages: [{ role: "user", content: message }],
+      temperature: 0.2,
+      maxOutputTokens: 500,
+    });
+
+    return result.toTextStreamResponse({
+      headers: {
+        "Cache-Control": "no-cache, no-transform",
+        "X-Content-Type-Options": "nosniff",
+      },
+    });
+  } catch (error) {
+    console.error("ISRO chat request failed:", error);
+    return Response.json({ error: "The Citizen Space Agent is temporarily unavailable." }, { status: 500 });
+  }
 }

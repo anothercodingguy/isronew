@@ -55,6 +55,19 @@ header {
   backdrop-filter: blur(12px);
 }
 
+/* Keep the homepage showcase sequence connected without changing mission-page spacing. */
+.home-page > section:nth-of-type(n + 3) {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 1024px) {
+  .home-page > section:nth-of-type(n + 3) {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
+
 /* Keep the application surface pitch black while preserving depth in cards. */
 section.bg-\[\#080C14\],
 section.bg-\[\#08090c\],

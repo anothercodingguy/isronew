@@ -67,7 +67,7 @@ export function LiveTelemetry() {
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           className={`h-1.5 w-1.5 rounded-full ${isLive ? "bg-emerald-400" : "bg-amber-300"}`}
         />
-        <span>Live telemetry: LEO orbit</span>
+        <span>{isLive ? "Live telemetry: LEO orbit" : "Telemetry fallback: launch complex"}</span>
       </div>
       <span className="hidden h-px w-10 bg-white/25 sm:block" />
       <span className="whitespace-nowrap">

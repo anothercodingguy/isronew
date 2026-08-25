@@ -57,14 +57,14 @@ header {
 
 /* Keep the homepage showcase sequence connected without changing mission-page spacing. */
 .home-page > section:nth-of-type(n + 3) {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 }
 
 @media (min-width: 1024px) {
   .home-page > section:nth-of-type(n + 3) {
-    padding-top: 7rem;
-    padding-bottom: 7rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
   }
 }
 

@@ -34,10 +34,12 @@ export function IsroAgent() {
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
-        answer += decoder.decode(value, { stream: true });
+        const chunk = decoder.decode(value, { stream: true });
+        answer += chunk.replace(/\*\*/g, "").replace(/\*/g, "");
         setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, content: answer } : message));
       }
-      if (!answer.trim()) {
+      answer = answer.replace(/\*\*/g, "").replace(/\*/g, "").trim();
+      if (!answer) {
         const fallbackText = "Namaste! I am the Citizen Space Agent. I can guide you on ISRO missions like Gaganyaan, student programmes like YUVIKA, career opportunities, and Bhuvan satellite datasets. How can I help you today?";
         setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, content: fallbackText } : message));
       }

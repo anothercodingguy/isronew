@@ -88,7 +88,7 @@ export async function POST(request: Request) {
   try {
     const selectedModel = hasOpenAi
       ? openai(process.env.OPENAI_MODEL || "gpt-4o-mini")
-      : groq(process.env.GROQ_MODEL || "llama-3.1-8b-instant");
+      : groq(process.env.GROQ_MODEL || "openai/gpt-oss-20b");
 
     const result = streamText({
       model: selectedModel,

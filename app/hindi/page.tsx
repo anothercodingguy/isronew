@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, Globe, MapPin, Radio, Rocket, Satellite, Sparkles } from "lucide-react";
 import Image from "next/image";
@@ -7,6 +8,7 @@ import Link from "next/link";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { isroImages } from "@/src/constants/images";
+import { useLanguage } from "@/src/context/LanguageContext";
 
 const hindiMissions = [
   {
@@ -60,6 +62,12 @@ const hindiServices = [
 ];
 
 export default function HindiPage() {
+  const { setLang } = useLanguage();
+
+  useEffect(() => {
+    setLang("hi");
+  }, [setLang]);
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-black text-white">
       <Navbar />
@@ -91,12 +99,12 @@ export default function HindiPage() {
             <p className="max-w-xl leading-7 text-base font-light text-white/75">
               इसरो का उद्देश्य राष्ट्र के विकास के लिए अंतरिक्ष विज्ञान और प्रौद्योगिकी का उपयोग करना है। उपग्रह संचार से लेकर गहन अंतरिक्ष अन्वेषण तक, भारत आत्मनिर्भरता के पथ पर अग्रसर है।
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               <Link
-                href="/careers"
+                href="/"
                 className="flex items-center gap-3 bg-ember px-6 py-4 text-[11px] font-bold uppercase tracking-[.2em] text-white transition-colors hover:bg-[#ff7654]"
               >
-                अवसर देखें <ArrowUpRight size={16} />
+                सम्पूर्ण साइट हिंदी में देखें <ArrowUpRight size={16} />
               </Link>
               <a
                 href="#missions"

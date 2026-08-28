@@ -1,8 +1,82 @@
+"use client";
+
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { isroImages } from "@/src/constants/images";
 import { LiveTelemetry } from "./LiveTelemetry";
+import { useLanguage } from "@/src/context/LanguageContext";
 
 export function Hero() {
-  return <section id="top" className="grain relative flex min-h-screen items-end overflow-hidden bg-black pb-12 pt-40 md:pb-16"><Image src={isroImages.lvm3Liftoff} alt="LVM3 rocket lifting off from Sriharikota" fill priority sizes="100vw" className="absolute inset-0 z-0 object-cover opacity-70" /><video className="absolute inset-0 z-[1] h-full w-full object-cover opacity-70" autoPlay loop muted playsInline poster={isroImages.lvm3Liftoff} aria-label="LVM3-M6 lift-off video"><source src="https://www.isro.gov.in/media_isro/video/LVM3M6_Lift_off_video.webm" type="video/webm" /></video><div className="absolute inset-0 z-[2] bg-gradient-to-t from-black via-black/40 to-transparent" /><div className="relative z-[3] mx-auto w-full max-w-[1440px] px-6 lg:px-10"><div className="pointer-events-none absolute right-0 top-0 z-10 hidden items-center gap-5 text-[10px] uppercase tracking-[.2em] text-white/45 sm:flex"><LiveTelemetry /></div><div className="mb-20 flex items-center gap-3 text-[10px] uppercase tracking-[.3em] text-white/60"><span className="h-1.5 w-1.5 rounded-full bg-ember" />LVM3-M6 · Sriharikota</div><h1 className="max-w-5xl text-[clamp(3.6rem,9.5vw,9.5rem)] font-bold uppercase leading-[.82] tracking-tighter">For the benefit<br /><span className="text-white/65">of the nation</span><br />and beyond.</h1><div className="mt-12"><a href="#missions" className="group flex w-fit items-center gap-5 border border-white/40 px-5 py-4 text-[10px] font-bold uppercase tracking-[.22em] transition-colors hover:border-ember hover:bg-ember">Explore our missions <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" /></a></div><a href="#missions" className="absolute bottom-0 right-6 hidden -translate-y-1/2 items-center gap-3 text-[10px] uppercase tracking-[.25em] text-white/50 lg:flex">Scroll to explore <ArrowDown size={15} /></a></div></section>;
+  const { isHindi } = useLanguage();
+
+  return (
+    <section id="top" className="grain relative flex min-h-screen items-end overflow-hidden bg-black pb-12 pt-40 md:pb-16">
+      <Image
+        src={isroImages.lvm3Liftoff}
+        alt="LVM3 rocket lifting off from Sriharikota"
+        fill
+        priority
+        sizes="100vw"
+        className="absolute inset-0 z-0 object-cover opacity-70"
+      />
+      <video
+        className="absolute inset-0 z-[1] h-full w-full object-cover opacity-70"
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster={isroImages.lvm3Liftoff}
+        aria-label="LVM3-M6 lift-off video"
+      >
+        <source src="https://www.isro.gov.in/media_isro/video/LVM3M6_Lift_off_video.webm" type="video/webm" />
+      </video>
+
+      <div className="absolute inset-0 z-[2] bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+      <div className="relative z-[3] mx-auto w-full max-w-[1440px] px-6 lg:px-10">
+        <div className="pointer-events-none absolute right-0 top-0 z-10 hidden items-center gap-5 text-[10px] uppercase tracking-[.2em] text-white/45 sm:flex">
+          <LiveTelemetry />
+        </div>
+
+        <div className="mb-14 flex items-center gap-3 text-[10px] uppercase tracking-[.3em] text-white/60 md:mb-20">
+          <span className="h-1.5 w-1.5 rounded-full bg-ember" />
+          {isHindi ? "एलवीएम3-एम6 · श्रीहरिकोटा अंतरिक्ष केंद्र" : "LVM3-M6 · Sriharikota"}
+        </div>
+
+        <h1 className="max-w-5xl text-[clamp(3.2rem,8.5vw,8.5rem)] font-bold uppercase leading-[.85] tracking-tighter">
+          {isHindi ? (
+            <>
+              राष्ट्र और मानवता<br />
+              <span className="text-white/65">के हित में</span><br />
+              अनंत की ओर।
+            </>
+          ) : (
+            <>
+              For the benefit<br />
+              <span className="text-white/65">of the nation</span><br />
+              and beyond.
+            </>
+          )}
+        </h1>
+
+        <div className="mt-12">
+          <a
+            href="#missions"
+            className="group flex w-fit items-center gap-5 border border-white/40 px-5 py-4 text-[10px] font-bold uppercase tracking-[.22em] transition-colors hover:border-ember hover:bg-ember"
+          >
+            {isHindi ? "अंतरिक्ष मिशन देखें" : "Explore our missions"}
+            <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+          </a>
+        </div>
+
+        <a
+          href="#missions"
+          className="absolute bottom-0 right-6 hidden -translate-y-1/2 items-center gap-3 text-[10px] uppercase tracking-[.25em] text-white/50 lg:flex"
+        >
+          {isHindi ? "अन्वेषण हेतु स्क्रॉल करें" : "Scroll to explore"}
+          <ArrowDown size={15} />
+        </a>
+      </div>
+    </section>
+  );
 }

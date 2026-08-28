@@ -19,19 +19,19 @@ interface NavGroup {
 
 const official = (path: string) => `https://www.isro.gov.in/${path}`;
 const utilityLinks: NavItem[] = [
-  { label: "Sitemap", href: official("sitemap.html") },
-  { label: "Contact us", href: official("contact.html") },
-  { label: "Feedback", href: official("feedback.html") },
-  { label: "RTI", href: official("RTI.html") },
-  { label: "Tender", href: official("Tenders.html") },
-  { label: "FAQ", href: official("faq.html") },
+  { label: "Sitemap", href: "/sitemap" },
+  { label: "Contact us", href: "/contact" },
+  { label: "Feedback", href: "/feedback" },
+  { label: "RTI", href: "/rti" },
+  { label: "Tender", href: "/tenders" },
+  { label: "FAQ", href: "/faq" },
 ];
 
 const navGroups: NavGroup[] = [
-  { label: "About", items: [{ label: "Profile", href: official("profile.html") }, { label: "Vision, Mission & Objectives", href: official("Vision-Mission-Objectives.html") }, { label: "Citizen Charter", href: official("citizencharter.html") }, { label: "Organisational Structure", href: official("organisation.html") }, { label: "DoS Centres / Units / Enterprises", href: official("isro_centre.html") }, { label: "Leadership", href: official("leadership.html") }, { label: "Timeline", href: official("Timeline.html") }, { label: "Contact Us", href: official("contact.html") }] },
+  { label: "About", items: [{ label: "Profile", href: official("profile.html") }, { label: "Vision, Mission & Objectives", href: official("Vision-Mission-Objectives.html") }, { label: "Citizen Charter", href: official("citizencharter.html") }, { label: "Organisational Structure", href: official("organisation.html") }, { label: "DoS Centres / Units / Enterprises", href: official("isro_centre.html") }, { label: "Leadership", href: official("leadership.html") }, { label: "Timeline", href: official("Timeline.html") }, { label: "Contact Us", href: "/contact" }] },
   { label: "Activities", items: [{ label: "Missions Accomplished", href: official("Mission.html") }, { label: "Upcoming Missions", href: official("FutureMissions.html") }, { label: "Science", href: official("Science.html") }, { label: "Launchers", href: official("Launchers.html") }, { label: "Satellites", href: official("Satellites.html") }, { label: "Space Applications", href: official("SpaceApplications.html") }, { label: "Gaganyaan", href: "/missions/gaganyaan" }, { label: "Research & Development", href: official("researchdevelopment.html") }, { label: "Outreach", href: official("Outreach.html") }] },
   { label: "Services", items: [{ label: "Launch Service", href: official("launchservices.html") }, { label: "Mission Support", href: official("missionsupport.html") }, { label: "Ground Systems Support", href: official("GroundSystemSupport.html") }, { label: "Satellite Communication", href: official("SatelliteCommunicationApplications.html") }, { label: "Earth Observation: Bhuvan & Bhoonidhi", href: "https://bhuvan.nrsc.gov.in/", external: true }, { label: "Satellite Navigation Services", href: official("SatelliteNavigationServices.html") }, { label: "Disaster Management", href: official("DisasterManagementNationalInternational.html") }, { label: "Technology Transfer", href: official("TechnologyTransfer.html") }] },
-  { label: "Programmes", items: [{ label: "Academic Courses", href: official("AcademicCourses.html") }, { label: "Fellowships", href: official("Fellowships.html") }, { label: "Space Tutor", href: official("spacetutor.html") }, { label: "Space on Wheels", href: official("SpaceOnWheels.html") }, { label: "Student Satellite", href: official("Student_Program_Satellite.html") }, { label: "YUVIKA", href: official("YUVIKA.html") }, { label: "Technology Transfer", href: official("TechnologyTransfer.html") }] },
+  { label: "Programmes", items: [{ label: "Academic Courses", href: official("AcademicCourses.html") }, { label: "Fellowships", href: official("Fellowships.html") }, { label: "Space Tutor", href: official("spacetutor.html") }, { label: "Space on Wheels", href: official("SpaceOnWheels.html") }, { label: "Student Satellite", href: official("Student_Program_Satellite.html") }, { label: "YUVIKA", href: "/careers" }, { label: "Technology Transfer", href: official("TechnologyTransfer.html") }] },
   { label: "Resources", items: [{ label: "River Basin Atlas", href: official("River_Basin_Atlas.html") }, { label: "Bhuvan", href: "https://bhuvan.nrsc.gov.in/", external: true }, { label: "Database for Emergency Management", href: official("DBEM.html") }, { label: "FEAST Tool", href: "https://feast.vssc.gov.in/", external: true }, { label: "I-grasp", href: "https://igrasp.isro.gov.in/", external: true }, { label: "MOSDAC", href: "https://mosdac.gov.in/", external: true }, { label: "Research Areas in Space", href: official("SupportedAreasofResearch.html") }] }
 ];
 
@@ -65,11 +65,11 @@ export function Navbar() {
       <div className="hidden border-b border-white/10 px-6 py-2 text-[9px] uppercase tracking-[.18em] text-white/45 lg:block lg:px-10">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between">
           <div className="flex gap-3">
-            <Link href="/" className="text-white/80">English</Link>
-            <a href="https://www.isro.gov.in/ISRO_HINDI/" target="_blank" rel="noopener noreferrer">हिंदी</a>
+            <Link href="/" className="text-white/80 hover:text-white">English</Link>
+            <Link href="/hindi" className="hover:text-white">हिंदी</Link>
             <span>|</span>
-            {utilityLinks.map((link) => <span key={link.label}><NavTarget item={link}><span className="ml-3">{link.label}</span></NavTarget><span className="ml-3">|</span></span>)}
-            <Link href="/careers" className="ml-3">Career</Link>
+            {utilityLinks.map((link) => <span key={link.label}><NavTarget item={link}><span className="ml-3 hover:text-white">{link.label}</span></NavTarget><span className="ml-3">|</span></span>)}
+            <Link href="/careers" className="ml-3 hover:text-white">Career</Link>
           </div>
           <span>Department of Space · Government of India</span>
         </div>

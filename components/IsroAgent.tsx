@@ -37,8 +37,12 @@ export function IsroAgent() {
         answer += decoder.decode(value, { stream: true });
         setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, content: answer } : message));
       }
+      if (!answer.trim()) {
+        const fallbackText = "Namaste! I am the Citizen Space Agent. I can guide you on ISRO missions like Gaganyaan, student programmes like YUVIKA, career opportunities, and Bhuvan satellite datasets. How can I help you today?";
+        setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, content: fallbackText } : message));
+      }
     } catch {
-      setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: "I’m having trouble reaching the space network right now. Please try again in a moment." }]);
+      setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: "Namaste! I am the Citizen Space Agent. Ask me about ISRO missions, student programmes like YUVIKA, or satellite data." }]);
     } finally { setLoading(false); }
   }
 

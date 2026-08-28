@@ -43,20 +43,8 @@ function getFallbackResponse(query: string): string {
   return "Namaste! As the Citizen Space Agent, I can assist you with ISRO missions (like Gaganyaan, Chandrayaan, and Aditya-L1), student programmes such as YUVIKA, career opportunities, and public geospatial data on Bhuvan. How can I help your mission today?";
 }
 
-function createSimulatedStream(text: string): Response {
-  const encoder = new TextEncoder();
-  const words = text.split(" ");
-  const stream = new ReadableStream({
-    async start(controller) {
-      for (const word of words) {
-        controller.enqueue(encoder.encode(word + " "));
-        await new Promise((r) => setTimeout(r, 25));
-      }
-      controller.close();
-    },
-  });
-
-  return new Response(stream, {
+function createGuaranteedResponse(text: string): Response {
+  return new Response(text, {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "no-cache, no-transform",
@@ -84,13 +72,17 @@ export async function POST(request: Request) {
     return Response.json({ error: "Message is too long. Please keep it under 4,000 characters." }, { status: 413 });
   }
 
-  const hasOpenAi = Boolean(process.env.OPENAI_API_KEY);
-  const hasGroq = Boolean(process.env.GROQ_API_KEY);
+  const rawOpenAi = process.env.OPENAI_API_KEY?.trim() || "";
+  const rawGroq = process.env.GROQ_API_KEY?.trim() || "";
+  
+  // Ignore dummy/placeholder keys
+  const hasOpenAi = Boolean(rawOpenAi && !rawOpenAi.includes("your_") && rawOpenAi.length > 10);
+  const hasGroq = Boolean(rawGroq && !rawGroq.includes("your_") && rawGroq.length > 10);
 
-  // If no live API key is set, stream instantly from verified ISRO knowledge engine
+  // If no live API key is set, respond instantly with verified ISRO knowledge
   if (!hasOpenAi && !hasGroq) {
     const fallbackText = getFallbackResponse(message);
-    return createSimulatedStream(fallbackText);
+    return createGuaranteedResponse(fallbackText);
   }
 
   try {
@@ -115,6 +107,6 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("ISRO live model request failed, using knowledge fallback:", error);
     const fallbackText = getFallbackResponse(message);
-    return createSimulatedStream(fallbackText);
+    return createGuaranteedResponse(fallbackText);
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, MapPin, Radio } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -179,17 +179,6 @@ export function IsroCentersMap() {
             {/* Grid overlay for aerospace telemetry look */}
             <div className="pointer-events-none absolute inset-0 opacity-20 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
-            {/* Radar / Beacon Node Pulse in top right */}
-            <div className="pointer-events-none absolute right-8 top-8 flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3 py-1.5 backdrop-blur-md">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-500" />
-              </span>
-              <span className="font-mono text-[10px] uppercase tracking-widest text-cyan-300">
-                Live Node
-              </span>
-            </div>
-
             {/* Center Content with Animation */}
             <AnimatePresence mode="wait">
               <motion.div
@@ -221,10 +210,6 @@ export function IsroCentersMap() {
                   <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.2em] text-white/50">
                     <MapPin size={15} className="text-ember" />
                     {active.coordinates}
-                  </p>
-                  <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.2em] text-white/40">
-                    <Radio size={14} className="text-cyan-400" />
-                    ISRO Primary Facility
                   </p>
                 </div>
               </motion.div>

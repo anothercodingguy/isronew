@@ -1,3 +1,4 @@
+import { openai } from "@ai-sdk/openai";
 import { groq } from "@ai-sdk/groq";
 import { streamText } from "ai";
 
@@ -8,7 +9,7 @@ interface ChatRequest {
   message?: unknown;
 }
 
-const ISRO_SYSTEM_PROMPT = `You are the ISRO Citizen Space Agent, a helpful public-facing assistant for the Indian Space Research Organisation.
+const ISRO_SYSTEM_PROMPT = `You are the ISRO Citizen Space Agent, a helpful public-facing AI assistant for the Indian Space Research Organisation.
 
 Answer questions concisely, professionally, and in plain language. Never invent official dates, application rules, launch schedules, or statistics. If the supplied facts do not answer a question, clearly say that the user should verify the latest information on the official ISRO website (isro.gov.in).
 
@@ -23,9 +24,12 @@ Use this verified ISRO context when relevant:
 When discussing careers, student programmes, or public services, provide practical next steps and direct users to official ISRO announcements for current application windows. Do not claim to submit applications, access private records, or provide live mission control data.`;
 
 export async function POST(request: Request) {
-  if (!process.env.GROQ_API_KEY) {
+  const hasOpenAi = Boolean(process.env.OPENAI_API_KEY);
+  const hasGroq = Boolean(process.env.GROQ_API_KEY);
+
+  if (!hasOpenAi && !hasGroq) {
     return Response.json(
-      { error: "The AI service is not configured. Add GROQ_API_KEY to the environment." },
+      { error: "AI model service is not configured. Add OPENAI_API_KEY or GROQ_API_KEY to environment." },
       { status: 503 },
     );
   }
@@ -49,11 +53,12 @@ export async function POST(request: Request) {
   }
 
   try {
-    // This demo intentionally uses context injection instead of a vector database.
-    // A future retrieval layer can append verified ISRO documents to this system prompt
-    // before calling streamText, without changing the frontend streaming contract.
+    const selectedModel = hasOpenAi
+      ? openai(process.env.OPENAI_MODEL || "gpt-4o-mini")
+      : groq(process.env.GROQ_MODEL || "llama-3.1-8b-instant");
+
     const result = streamText({
-      model: groq("llama3-8b-8192"),
+      model: selectedModel,
       system: ISRO_SYSTEM_PROMPT,
       messages: [{ role: "user", content: message }],
       temperature: 0.2,
